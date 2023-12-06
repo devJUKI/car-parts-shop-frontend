@@ -1,8 +1,35 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import Logo from "../assets/logo.svg";
+import { useAuth } from "../contexts/AuthProvider";
+import HeaderLink from "./HeaderLink";
 
 function Header() {
+  const { authData, accessToken, login, logout } = useAuth();
+  const [buttonText, setButtonText] = useState("Debug");
+
+  useEffect(() => {
+    if (authData) {
+      setButtonText("Hello, " + authData.firstname);
+    }
+  }, [authData]);
+
+  const onButtonHover = () => {
+    setButtonText("Logout");
+  };
+
+  const onButtonExitHover = () => {
+    if (authData) {
+      setButtonText("Hello, " + authData.firstname);
+    }
+  };
+
+  const location = useLocation();
+
+  const isLinkActive = (path) => {
+    return location.pathname === path;
+  };
+
   return (
     <nav className="fixed top-0 left-0 right-0 z-10 bg-white">
       <div className="flex h-16 shadow-md">
@@ -11,22 +38,47 @@ function Header() {
             <img src={Logo} alt="Logo" className="h-12 w-auto" />
           </Link>
           <div className="flex h-full space-x-8">
-            <Link to="Home" className="">
-              <div className="h-full flex items-center text-redText relative">
-                Home
-                <div className="flex h-0.5 w-full absolute bottom-0 left-0 bg-redText"></div>
-              </div>
-            </Link>
-            <Link to="Cars" className="flex-grow flex items-center">
+            <HeaderLink to="/" isLinkActive={isLinkActive}>
+              Home
+            </HeaderLink>
+            <HeaderLink to="/Cars" isLinkActive={isLinkActive}>
               Cars
-            </Link>
-            <Link to="Contact" className="flex-grow flex items-center">
+            </HeaderLink>
+            <HeaderLink to="/Shops" isLinkActive={isLinkActive}>
+              Shops
+            </HeaderLink>
+            <HeaderLink to="/Contact" isLinkActive={isLinkActive}>
               Contact
-            </Link>
+            </HeaderLink>
           </div>
-          <Link to="Login" className="flex h-full items-center">
-            Login
-          </Link>
+          {authData ? (
+            <button
+              onMouseEnter={onButtonHover}
+              onMouseLeave={onButtonExitHover}
+              onClick={logout}
+              className="flex h-full items-center justify-end w-40"
+            >
+              {buttonText}
+            </button>
+          ) : (
+            <Link
+              to="Login"
+              className={`flex h-full items-center justify-end w-40 relative ${
+                isLinkActive("/Login") || isLinkActive("/Register")
+                  ? "text-redText"
+                  : ""
+              }`}
+            >
+              Login
+              <div
+                className={`h-0.5 absolute bottom-0 right-0 bg-red-500 transition-all duration-300 ${
+                  isLinkActive("/Login") || isLinkActive("/Register")
+                    ? "w-8"
+                    : "w-0"
+                }`}
+              ></div>
+            </Link>
+          )}
         </div>
       </div>
     </nav>

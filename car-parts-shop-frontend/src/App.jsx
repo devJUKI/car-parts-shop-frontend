@@ -1,12 +1,37 @@
 import Header from "./components/Header.jsx";
-import Body from "./components/Body.jsx";
+import Home from "./components/Home.jsx";
+import Register from "./components/Register.jsx";
+import Login from "./components/Login.jsx";
+import Cars from "./components/Cars.jsx";
+import Car from "./components/Car.jsx";
+import Parts from "./components/Parts.jsx";
+import Contact from "./components/Contact.jsx";
+import Shops from "./components/Shops.jsx";
+import Shop from "./components/Shop.jsx";
+import CreateShop from "./components/CreateShop.jsx";
 import "./App.css";
+import { Route, Routes } from "react-router-dom";
+import AddCar from "./components/AddCar.jsx";
+import AddPart from "./components/AddPart.jsx";
 
 function App() {
   return (
     <>
       <Header />
-      <Body />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/Cars" element={<Cars />} />
+        <Route path="/Car/:shopId/:carId" element={<Car />} />
+        <Route path="/AddCar/:shopId" element={<AddCar />} />
+        <Route path="/Parts/:makeId/:modelId/:partName" element={<Parts />} />
+        <Route path="/CreatePart/:shopId/:carId" element={<AddPart />} />
+        <Route path="/Shops" element={<Shops />} />
+        <Route path="/CreateShop" element={<CreateShop />} />
+        <Route path="/Shop/:shopId" element={<Shop />} />
+        <Route path="/Contact" element={<Contact />} />
+        <Route path="/Register" element={<Register />} />
+        <Route path="/Login" element={<Login />} />
+      </Routes>
     </>
   );
 }
