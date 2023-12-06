@@ -99,6 +99,12 @@ function Car() {
               <div className="space-x-2">
                 <Link
                   className="border text-sm py-2 px-6 rounded-lg text-white bg-redText font-semibold justify-center"
+                  to={`/EditCar/${shopId}/${carId}`}
+                >
+                  Edit Car
+                </Link>
+                <Link
+                  className="border text-sm py-2 px-6 rounded-lg text-white bg-redText font-semibold justify-center"
                   onClick={deleteCar}
                 >
                   Delete Car
@@ -118,7 +124,7 @@ function Car() {
                 return (
                   <Link
                     key={part.id}
-                    onClick={() => deletePart(part.id)}
+                    to={`/Part/${shopId}/${carId}/${part.id}`}
                     className="w-1/3 text-left shadow-[0_0px_20px_-10px_rgba(0,0,0,0.4)] font-bold text-greyHeader py-2 px-4 rounded-lg mb-4"
                   >
                     <div className="items-center flex justify-between">

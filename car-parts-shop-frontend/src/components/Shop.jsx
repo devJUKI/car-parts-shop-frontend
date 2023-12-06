@@ -79,7 +79,7 @@ function Shop() {
               </span>
               <div className="space-x-2">
                 <Link
-                  onClick={() => {}}
+                  to={`/EditShop/${shopId}`}
                   className="border text-sm py-2 px-6 rounded-lg text-white bg-redText font-semibold justify-center"
                 >
                   Edit Shop

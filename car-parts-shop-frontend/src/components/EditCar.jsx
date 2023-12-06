@@ -3,9 +3,9 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../contexts/AuthProvider";
 
-function AddCar() {
+function EditCar() {
   const navigate = useNavigate();
-  const { shopId } = useParams();
+  const { shopId, carId } = useParams();
   const [makes, setMakes] = useState([]);
   const [models, setModels] = useState([]);
   const [bodies, setBodies] = useState([]);
@@ -46,7 +46,7 @@ function AddCar() {
     }
   };
 
-  const handlePost = async () => {
+  const handlePut = async () => {
     if (
       selectedMake == -1 ||
       selectedModel == -1 ||
@@ -62,7 +62,8 @@ function AddCar() {
     }
 
     try {
-      const postData = {
+      const putData = {
+        id: carId,
         firstRegistration: firstRegistration,
         mileage: mileage,
         engine: engine,
@@ -74,7 +75,7 @@ function AddCar() {
         shopId: shopId,
       };
 
-      console.log(postData);
+      console.log(putData);
 
       const config = {
         headers: {
@@ -83,13 +84,13 @@ function AddCar() {
         },
       };
 
-      await axios.post(
-        `https://localhost:7119/api/shops/${shopId}/cars`,
-        postData,
+      await axios.put(
+        `https://localhost:7119/api/shops/${shopId}/Cars/${carId}`,
+        putData,
         config
       );
 
-      navigate(`/Shop/${shopId}`);
+      navigate(`/Car/${shopId}/${carId}`);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -101,13 +102,13 @@ function AddCar() {
           <div className="mt-8 mx-36 justify-start space-y-4">
             <div className="justify-between flex">
               <Link
-                to={`/Shop/${shopId}`}
+                to={`/Car/${shopId}/${carId}`}
                 className="text-redText text-2xl font-semibold"
               >
                 Back
               </Link>
               <span className="text-greyHeader text-2xl font-semibold">
-                Add Car
+                Edit Car
               </span>
               <span className="text-redText text-opacity-0 text-2xl font-semibold">
                 Back
@@ -244,10 +245,10 @@ function AddCar() {
                 ))}
               </select>
               <button
-                onClick={handlePost}
+                onClick={handlePut}
                 className="border text-sm py-2 rounded-lg text-white bg-redText font-semibold flex w-full justify-center"
               >
-                Add
+                Submit
               </button>
             </div>
           </div>
@@ -257,4 +258,4 @@ function AddCar() {
   );
 }
 
-export default AddCar;
+export default EditCar;
