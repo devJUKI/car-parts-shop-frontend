@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Background from "../assets/background.png";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { FaSearch } from "react-icons/fa";
 
 function Home() {
   const [makes, setMakes] = useState([]);
@@ -10,10 +11,6 @@ function Home() {
   const [selectedMake, setSelectedMake] = useState(-1);
   const [selectedModel, setSelectedModel] = useState(-1);
   const [selectedPart, setSelectedPart] = useState("");
-
-  useEffect(() => {
-    console.log(selectedPart);
-  }, [selectedPart]);
 
   const fetchData = async (url, setData) => {
     try {
@@ -72,7 +69,7 @@ function Home() {
                 sellers
               </div>
               <div className="space-y-3">
-                <select
+                {/* <select
                   onChange={makeChangeHandler}
                   className="w-full rounded-lg py-2 pl-3 text-sm border-2 border-greyHeader border-opacity-80 text-greyHeader text-opacity-80 font-semibold"
                 >
@@ -113,13 +110,16 @@ function Home() {
                   onChange={(e) => {
                     setSelectedPart(e.target.value);
                   }}
-                />
+                /> */}
                 <Link
                   disabled={selectedPart == ""}
-                  to={constructPartUrl()}
-                  className="border text-sm py-2 rounded-lg text-white bg-redText font-semibold flex w-fullv justify-center"
+                  to={"/Shops"}
+                  className="border text-sm py-2 rounded-lg text-white bg-redText font-semibold flex w-full justify-center"
                 >
-                  Search
+                  <div className="space-x-2 flex items-center">
+                    <span>Search</span>
+                    <FaSearch />
+                  </div>
                 </Link>
               </div>
             </div>

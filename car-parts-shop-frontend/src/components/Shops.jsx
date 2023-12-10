@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { useAuth } from "../contexts/AuthProvider";
 
 function Shops() {
   const [shops, setShops] = useState([]);
+  const { authData, accessToken, login, logout } = useAuth();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -30,12 +32,18 @@ function Shops() {
               <span className="text-greyHeader text-2xl font-semibold">
                 Shops
               </span>
-              <Link
-                className="border text-sm py-2 px-6 rounded-lg text-white bg-redText font-semibold justify-center"
-                to={"/CreateShop"}
-              >
-                Create Shop
-              </Link>
+              {authData ? (
+                <Link
+                  className="border text-sm py-2 px-6 rounded-lg text-white bg-redText font-semibold justify-center"
+                  to={"/CreateShop"}
+                >
+                  Create Shop
+                </Link>
+              ) : (
+                <span className="text-redText text-opacity-0 text-2xl font-semibold">
+                  Back
+                </span>
+              )}
             </div>
             <div className="flex flex-wrap">
               {shops.map((shop) => (

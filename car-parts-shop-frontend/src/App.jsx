@@ -15,6 +15,7 @@ import EditShop from "./components/EditShop.jsx";
 import EditCar from "./components/EditCar.jsx";
 import Part from "./components/Part.jsx";
 import EditPart from "./components/EditPart.jsx";
+import Footer from "./components/Footer.jsx";
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
 
@@ -40,6 +41,7 @@ function App() {
         <Route path="/Register" element={<Register />} />
         <Route path="/Login" element={<Login />} />
       </Routes>
+      <Footer />
     </>
   );
 }

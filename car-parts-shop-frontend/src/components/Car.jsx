@@ -2,13 +2,15 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "../contexts/AuthProvider";
 import axios from "axios";
+import { IoIosArrowBack } from "react-icons/io";
 
 function Car() {
   const { shopId, carId } = useParams();
   const [parts, setParts] = useState([]);
   const [car, setCar] = useState();
+  const [isModalOpen, setModalOpen] = useState(false);
 
-  const { userData, accessToken, login, logout } = useAuth();
+  const { authData, accessToken, login, logout } = useAuth();
   const navigate = useNavigate();
 
   const fetchPartsData = async () => {
@@ -59,26 +61,6 @@ function Car() {
     }
   };
 
-  const deletePart = async (partId) => {
-    const config = {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        "Content-Type": "application/json",
-      },
-    };
-
-    try {
-      await axios.delete(
-        `https://localhost:7119/api/shops/${shopId}/Cars/${carId}/Parts/${partId}`,
-        config
-      );
-
-      fetchPartsData();
-    } catch (error) {
-      console.error(`Error deleting car ${carId}:`, error);
-    }
-  };
-
   return (
     <>
       <div className="flex justify-center h-full">
@@ -87,40 +69,45 @@ function Car() {
             <div className="justify-between flex">
               <Link
                 to={`/Shop/${shopId}`}
-                className="text-redText text-2xl font-semibold"
+                className="text-redText text-2xl font-semibold flex items-center space-x-2"
               >
-                Back
+                <IoIosArrowBack />
+                <span>Back</span>
               </Link>
               {car && (
                 <span className="text-greyHeader text-2xl font-semibold">
                   {car.make} {car.model}
                 </span>
               )}
-              <div className="space-x-2">
-                <Link
-                  className="border text-sm py-2 px-6 rounded-lg text-white bg-redText font-semibold justify-center"
-                  to={`/EditCar/${shopId}/${carId}`}
-                >
-                  Edit Car
-                </Link>
-                <Link
-                  className="border text-sm py-2 px-6 rounded-lg text-white bg-redText font-semibold justify-center"
-                  onClick={deleteCar}
-                >
-                  Delete Car
-                </Link>
-                <Link
-                  className="border text-sm py-2 px-6 rounded-lg text-white bg-redText font-semibold justify-center"
-                  to={`/CreatePart/${shopId}/${carId}`}
-                >
-                  Add Part
-                </Link>
-              </div>
+              {authData && car && authData.id == car.shop.user.id ? (
+                <div className="space-x-2">
+                  <Link
+                    className="border text-sm py-2 px-6 rounded-lg text-white bg-redText font-semibold justify-center"
+                    to={`/EditCar/${shopId}/${carId}`}
+                  >
+                    Edit Car
+                  </Link>
+                  <Link
+                    className="border text-sm py-2 px-6 rounded-lg text-white bg-redText font-semibold justify-center"
+                    onClick={() => setModalOpen(true)}
+                  >
+                    Delete Car
+                  </Link>
+                  <Link
+                    className="border text-sm py-2 px-6 rounded-lg text-white bg-redText font-semibold justify-center"
+                    to={`/CreatePart/${shopId}/${carId}`}
+                  >
+                    Add Part
+                  </Link>
+                </div>
+              ) : (
+                <span className="text-redText text-opacity-0 text-2xl font-semibold">
+                  Back
+                </span>
+              )}
             </div>
             <div className="flex flex-wrap">
               {parts.map((part) => {
-                const partsCount = parts[part.id] || 0;
-
                 return (
                   <Link
                     key={part.id}
@@ -137,6 +124,25 @@ function Car() {
                 );
               })}
             </div>
+            {isModalOpen ? (
+              <div className="border-redText border-0 items-center justify-between shadow-[0_0px_20px_-10px_rgba(0,0,0,0.4)] absolute top-1/2 left-1/2 font-bold text-greyHeader py-4 px-4 rounded-lg">
+                <h1>Are you sure you want to delete?</h1>
+                <div className="flex mt-4 space-x-2">
+                  <button
+                    onClick={() => setModalOpen(false)}
+                    className="grow border text-sm py-2 px-6 rounded-lg text-white bg-redText font-semibold justify-center"
+                  >
+                    No
+                  </button>
+                  <button
+                    onClick={deleteCar}
+                    className="grow border text-sm py-2 px-6 rounded-lg text-white bg-redText font-semibold justify-center"
+                  >
+                    Yes
+                  </button>
+                </div>
+              </div>
+            ) : null}
           </div>
         </div>
       </div>

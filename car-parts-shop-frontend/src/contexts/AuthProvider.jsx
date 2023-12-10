@@ -15,9 +15,6 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     if (accessToken) {
-      console.log("bbd");
-      console.log(accessToken);
-
       Cookies.set("auth_token", accessToken, {
         expires: 1 / 24,
       });
@@ -42,7 +39,6 @@ export const AuthProvider = ({ children }) => {
   }, [accessToken]);
 
   const getUserData = async (accessToken) => {
-    console.log(accessToken);
     try {
       const response = await Axios.get("https://localhost:7119/api/GetUser", {
         headers: {
@@ -59,7 +55,6 @@ export const AuthProvider = ({ children }) => {
   };
 
   const login = (accessToken) => {
-    console.log(accessToken);
     setAccessToken(accessToken);
   };
 

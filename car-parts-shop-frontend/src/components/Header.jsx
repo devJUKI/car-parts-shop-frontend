@@ -41,9 +41,6 @@ function Header() {
             <HeaderLink to="/" isLinkActive={isLinkActive}>
               Home
             </HeaderLink>
-            <HeaderLink to="/Cars" isLinkActive={isLinkActive}>
-              Cars
-            </HeaderLink>
             <HeaderLink to="/Shops" isLinkActive={isLinkActive}>
               Shops
             </HeaderLink>
@@ -51,34 +48,39 @@ function Header() {
               Contact
             </HeaderLink>
           </div>
-          {authData ? (
-            <button
-              onMouseEnter={onButtonHover}
-              onMouseLeave={onButtonExitHover}
-              onClick={logout}
-              className="flex h-full items-center justify-end w-40"
-            >
-              {buttonText}
-            </button>
-          ) : (
-            <Link
-              to="Login"
-              className={`flex h-full items-center justify-end w-40 relative ${
-                isLinkActive("/Login") || isLinkActive("/Register")
-                  ? "text-redText"
-                  : ""
-              }`}
-            >
-              Login
-              <div
-                className={`h-0.5 absolute bottom-0 right-0 bg-red-500 transition-all duration-300 ${
+          <span to="/">
+            <img src={Logo} alt="Logo" className="h-12 w-auto opacity-0" />
+          </span>
+          <div className="absolute right-36">
+            {authData ? (
+              <button
+                onMouseEnter={onButtonHover}
+                onMouseLeave={onButtonExitHover}
+                onClick={logout}
+                className="flex h-full items-center justify-end w-40"
+              >
+                {buttonText}
+              </button>
+            ) : (
+              <Link
+                to="Login"
+                className={`flex h-16 items-center justify-end w-40 relative ${
                   isLinkActive("/Login") || isLinkActive("/Register")
-                    ? "w-8"
-                    : "w-0"
+                    ? "text-redText"
+                    : ""
                 }`}
-              ></div>
-            </Link>
-          )}
+              >
+                Login
+                <div
+                  className={`h-0.5 absolute bottom-0 right-0 bg-red-500 transition-all duration-300 ${
+                    isLinkActive("/Login") || isLinkActive("/Register")
+                      ? "w-8"
+                      : "w-0"
+                  }`}
+                ></div>
+              </Link>
+            )}
+          </div>
         </div>
       </div>
     </nav>
