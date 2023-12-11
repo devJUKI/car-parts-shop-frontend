@@ -125,7 +125,7 @@ function Home() {
             </div>
           </div>
           <div className="flex flex-2 h-full bg-red-200">
-            <img src={Background} className="object-cover" />
+            <img src={Background} className="object-cover max-w-5xl" />
           </div>
         </div>
       </div>

@@ -12,7 +12,7 @@ function Shop() {
   const [isModalOpen, setModalOpen] = useState(false);
 
   const navigate = useNavigate();
-  const { authData, accessToken, login, logout } = useAuth();
+  const { authData, accessToken, isAdmin, login, logout } = useAuth();
 
   useEffect(() => {
     const fetchCarsData = async () => {
@@ -94,7 +94,7 @@ function Shop() {
               <span className="text-greyHeader text-2xl font-semibold">
                 Cars
               </span>
-              {authData && shop && authData.id == shop.user.id ? (
+              {(authData && shop && authData.id == shop.user.id) || isAdmin ? (
                 <div className="space-x-2">
                   <Link
                     to={`/EditShop/${shopId}`}
@@ -172,7 +172,7 @@ function Shop() {
               })}
             </div>
             {isModalOpen ? (
-              <div className="border-redText border-0 items-center justify-between shadow-[0_0px_20px_-10px_rgba(0,0,0,0.4)] absolute top-1/2 left-1/2 font-bold text-greyHeader py-4 px-4 rounded-lg">
+              <div className="bg-white border-redText border-0 items-center justify-between shadow-[0_0px_20px_-10px_rgba(0,0,0,0.4)] absolute top-72 left-0 right-0 ml-auto mr-auto w-1/3 font-bold text-greyHeader py-4 px-4 rounded-lg">
                 <h1>Are you sure you want to delete?</h1>
                 <div className="flex mt-4 space-x-2">
                   <button

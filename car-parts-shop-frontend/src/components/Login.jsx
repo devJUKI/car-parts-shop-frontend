@@ -7,12 +7,21 @@ import { useNavigate } from "react-router-dom";
 
 function Register() {
   const navigate = useNavigate();
-  const { accessToken, login, logout } = useAuth();
+  const { authData, accessToken, login, logout } = useAuth();
 
-  const [email, setEmail] = useState("Email");
-  const [password, setPassword] = useState("Password");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const [error, setError] = useState("");
 
   const handleLogin = async () => {
+    if (!email || !password) {
+      setError("Please fill in all fields");
+      return;
+    }
+
+    setError("");
+
     try {
       // Make an HTTP POST request to your server with the email and password
       const response = await Axios.post("https://localhost:7119/api/Login", {
@@ -28,6 +37,12 @@ function Register() {
       navigate("/");
     } catch (error) {
       console.error("Registration failed:", error);
+
+      if (error.response.status == 400) {
+        setError("Invalid credentials");
+      } else {
+        setError(error.message);
+      }
     }
   };
 
@@ -45,38 +60,28 @@ function Register() {
               </div>
               <div className="text-center">
                 <div className="space-y-3">
-                  <input
-                    type="text"
-                    value={email}
-                    className="w-full rounded-lg pl-4 py-2 text-sm border-2 border-greyHeader border-opacity-80 text-greyHeader text-opacity-80 font-semibold"
-                    onChange={(e) => setEmail(e.target.value)}
-                    onFocus={(e) => {
-                      if (e.target.value === "Email") {
-                        e.target.value = "";
-                      }
-                    }}
-                    onBlur={(e) => {
-                      if (e.target.value === "") {
-                        e.target.value = "Email";
-                      }
-                    }}
-                  />
-                  <input
-                    type="text"
-                    value={password}
-                    className="w-full rounded-lg pl-4 py-2 text-sm border-2 border-greyHeader border-opacity-80 text-greyHeader text-opacity-80 font-semibold"
-                    onChange={(e) => setPassword(e.target.value)}
-                    onFocus={(e) => {
-                      if (e.target.value === "Password") {
-                        e.target.value = "";
-                      }
-                    }}
-                    onBlur={(e) => {
-                      if (e.target.value === "") {
-                        e.target.value = "Password";
-                      }
-                    }}
-                  />
+                  <div className="text-left">
+                    <p className="ml-2 text-greyHeader text-opacity-80 font-semibold text-sm">
+                      Email
+                    </p>
+                    <input
+                      type="text"
+                      value={email}
+                      className="w-full rounded-lg pl-4 py-2 text-sm border-2 border-greyHeader border-opacity-80 text-greyHeader text-opacity-80 font-semibold"
+                      onChange={(e) => setEmail(e.target.value)}
+                    />
+                  </div>
+                  <div className="text-left">
+                    <p className="ml-2 text-greyHeader text-opacity-80 font-semibold text-sm">
+                      Password
+                    </p>
+                    <input
+                      type="password"
+                      value={password}
+                      className="w-full rounded-lg pl-4 py-2 text-sm border-2 border-greyHeader border-opacity-80 text-greyHeader text-opacity-80 font-semibold"
+                      onChange={(e) => setPassword(e.target.value)}
+                    />
+                  </div>
                   <button
                     onClick={handleLogin}
                     className="border w-full text-sm py-2 rounded-lg text-white bg-redText font-semibold"
@@ -84,6 +89,11 @@ function Register() {
                     Continue
                   </button>
                 </div>
+                {error ? (
+                  <p className="mt-2 text-redText text-opacity-80 font-semibold text-sm">
+                    {error}
+                  </p>
+                ) : null}
                 <p className="mt-2 text-greyHeader text-opacity-80 font-semibold text-xs">
                   Don't have an account?{" "}
                   <Link to="../Register" className="text-greyHeader">
@@ -94,7 +104,7 @@ function Register() {
             </div>
           </div>
           <div className="flex flex-2 h-full bg-red-200">
-            <img src={Background} className="object-cover" />
+            <img src={Background} className="object-cover max-w-5xl" />
           </div>
         </div>
       </div>

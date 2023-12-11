@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import Cookies from "js-cookie";
 import Axios from "axios";
+import { jwtDecode } from "jwt-decode";
 
 const AuthContext = createContext();
 
@@ -13,11 +14,19 @@ export const AuthProvider = ({ children }) => {
     return sessionStorage.getItem("auth_data");
   });
 
+  const [isAdmin, setIsAdmin] = useState(() => {
+    return sessionStorage.getItem("auth_isAdmin");
+  });
+
   useEffect(() => {
     if (accessToken) {
       Cookies.set("auth_token", accessToken, {
         expires: 1 / 24,
       });
+
+      const decoded = jwtDecode(accessToken);
+      sessionStorage.setItem("auth_isAdmin", decoded.CustomRole == "Admin");
+      setIsAdmin(decoded.CustomRole == "Admin");
 
       async function getUserDataWrapper(accessToken) {
         const authData = await getUserData(accessToken);
@@ -35,6 +44,8 @@ export const AuthProvider = ({ children }) => {
     } else {
       sessionStorage.removeItem("auth_data");
       setAuthData(null);
+      sessionStorage.setItem("auth_isAdmin", false);
+      setIsAdmin(false);
     }
   }, [accessToken]);
 
@@ -64,7 +75,9 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ authData, accessToken, login, logout }}>
+    <AuthContext.Provider
+      value={{ authData, accessToken, isAdmin, login, logout }}
+    >
       {children}
     </AuthContext.Provider>
   );

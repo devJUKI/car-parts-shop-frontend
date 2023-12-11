@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../contexts/AuthProvider";
+import { IoIosArrowBack } from "react-icons/io";
 
 function EditCar() {
   const navigate = useNavigate();
@@ -24,6 +25,8 @@ function EditCar() {
   const [bodyTypeId, setBodyTypeId] = useState(-1);
   const [fuelTypeId, setFuelTypeId] = useState(-1);
   const [gearboxTypeId, setGearboxTypeId] = useState(-1);
+
+  const [error, setError] = useState("");
 
   useEffect(() => {
     fetchData("https://localhost:7119/api/cardata/makes", setMakes);
@@ -50,16 +53,18 @@ function EditCar() {
     if (
       selectedMake == -1 ||
       selectedModel == -1 ||
-      mileage == "" ||
-      engine == "" ||
-      power == "" ||
+      !mileage ||
+      !engine ||
+      !power ||
       bodyTypeId == -1 ||
       fuelTypeId == -1 ||
       gearboxTypeId == -1
     ) {
-      alert("Please, provide appropriate inputs");
+      setError("Please fill in all fields correctly");
       return;
     }
+
+    setError("");
 
     try {
       const putData = {
@@ -74,8 +79,6 @@ function EditCar() {
         modelId: selectedModel,
         shopId: shopId,
       };
-
-      console.log(putData);
 
       const config = {
         headers: {
@@ -93,6 +96,14 @@ function EditCar() {
       navigate(`/Car/${shopId}/${carId}`);
     } catch (error) {
       console.error("Error fetching data:", error);
+
+      if (error.response.status == 400) {
+        setError("Invalid data");
+      } else if (error.response.status == 403) {
+        setError("Your authentication token is expired, log in again");
+      } else {
+        setError(error.message);
+      }
     }
   };
   return (
@@ -103,8 +114,9 @@ function EditCar() {
             <div className="justify-between flex">
               <Link
                 to={`/Car/${shopId}/${carId}`}
-                className="text-redText text-2xl font-semibold"
+                className="text-redText text-2xl font-semibold flex items-center"
               >
+                <IoIosArrowBack className="mr-2" />
                 Back
               </Link>
               <span className="text-greyHeader text-2xl font-semibold">
@@ -114,142 +126,162 @@ function EditCar() {
                 Back
               </span>
             </div>
-            <div className="space-y-4">
-              <select
-                className="w-full rounded-lg pl-4 py-2 text-sm border-2 border-greyHeader border-opacity-80 text-greyHeader text-opacity-80 font-semibold"
-                value={selectedMake}
-                onChange={(e) => {
-                  setSelectedMake(e.target.value);
-                }}
-              >
-                <option value={-1}>Choose make</option>
-                {makes.map((make) => (
-                  <option key={make.id} value={make.id}>
-                    {make.name}
-                  </option>
-                ))}
-              </select>
-              <select
-                className="w-full rounded-lg pl-4 py-2 text-sm border-2 border-greyHeader border-opacity-80 text-greyHeader text-opacity-80 font-semibold"
-                value={selectedModel}
-                onChange={(e) => {
-                  setSelectedModel(e.target.value);
-                }}
-              >
-                <option value={-1}>Choose model</option>
-                {models.map((model) => (
-                  <option key={model.id} value={model.id}>
-                    {model.name}
-                  </option>
-                ))}
-              </select>
-              <input
-                type="date"
-                value={firstRegistration}
-                className="w-full rounded-lg pl-4 py-2 text-sm border-2 border-greyHeader border-opacity-80 text-greyHeader text-opacity-80 font-semibold"
-                onChange={(e) => {
-                  setFirstRegistration(e.target.value);
-                }}
-              />
-              <input
-                type="text"
-                defaultValue="Enter mileage"
-                className="w-full rounded-lg pl-4 py-2 text-sm border-2 border-greyHeader border-opacity-80 text-greyHeader text-opacity-80 font-semibold"
-                onFocus={(e) => {
-                  if (e.target.value === "Enter mileage") {
-                    e.target.value = "";
-                  }
-                }}
-                onBlur={(e) => {
-                  if (e.target.value === "") {
-                    e.target.value = "Enter mileage";
-                  }
-                }}
-                onChange={(e) => {
-                  setMileage(e.target.value);
-                }}
-              />
-              <input
-                type="text"
-                defaultValue="Enter engine"
-                className="w-full rounded-lg pl-4 py-2 text-sm border-2 border-greyHeader border-opacity-80 text-greyHeader text-opacity-80 font-semibold"
-                onFocus={(e) => {
-                  if (e.target.value === "Enter engine") {
-                    e.target.value = "";
-                  }
-                }}
-                onBlur={(e) => {
-                  if (e.target.value === "") {
-                    e.target.value = "Enter engine";
-                  }
-                }}
-                onChange={(e) => {
-                  setEngine(e.target.value);
-                }}
-              />
-              <input
-                type="text"
-                defaultValue="Enter power"
-                className="w-full rounded-lg pl-4 py-2 text-sm border-2 border-greyHeader border-opacity-80 text-greyHeader text-opacity-80 font-semibold"
-                onFocus={(e) => {
-                  if (e.target.value === "Enter power") {
-                    e.target.value = "";
-                  }
-                }}
-                onBlur={(e) => {
-                  if (e.target.value === "") {
-                    e.target.value = "Enter power";
-                  }
-                }}
-                onChange={(e) => {
-                  setPower(e.target.value);
-                }}
-              />
-              <select
-                className="w-full rounded-lg pl-4 py-2 text-sm border-2 border-greyHeader border-opacity-80 text-greyHeader text-opacity-80 font-semibold"
-                onChange={(e) => {
-                  setBodyTypeId(e.target.value);
-                }}
-              >
-                <option value={-1}>Choose body</option>
-                {bodies.map((body) => (
-                  <option key={body.id} value={body.id}>
-                    {body.name}
-                  </option>
-                ))}
-              </select>
-              <select
-                className="w-full rounded-lg pl-4 py-2 text-sm border-2 border-greyHeader border-opacity-80 text-greyHeader text-opacity-80 font-semibold"
-                onChange={(e) => {
-                  setFuelTypeId(e.target.value);
-                }}
-              >
-                <option value={-1}>Choose fuel</option>
-                {fuels.map((fuel) => (
-                  <option key={fuel.id} value={fuel.id}>
-                    {fuel.name}
-                  </option>
-                ))}
-              </select>
-              <select
-                className="w-full rounded-lg pl-4 py-2 text-sm border-2 border-greyHeader border-opacity-80 text-greyHeader text-opacity-80 font-semibold"
-                onChange={(e) => {
-                  setGearboxTypeId(e.target.value);
-                }}
-              >
-                <option value={-1}>Choose gearbox</option>
-                {gearboxes.map((gearbox) => (
-                  <option key={gearbox.id} value={gearbox.id}>
-                    {gearbox.name}
-                  </option>
-                ))}
-              </select>
+            <div className="space-y-4 flex flex-wrap">
+              <div className="flex w-full space-x-4">
+                <div className="text-left w-1/2">
+                  <p className="ml-2 text-greyHeader text-opacity-80 font-semibold text-sm">
+                    Name
+                  </p>
+                  <select
+                    className="w-full rounded-lg pl-4 py-2 text-sm border-2 border-greyHeader border-opacity-80 text-greyHeader text-opacity-80 font-semibold"
+                    value={selectedMake}
+                    onChange={(e) => {
+                      setSelectedMake(e.target.value);
+                    }}
+                  >
+                    <option value={-1}>Choose make</option>
+                    {makes.map((make) => (
+                      <option key={make.id} value={make.id}>
+                        {make.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="text-left w-1/2">
+                  <p className="ml-2 text-greyHeader text-opacity-80 font-semibold text-sm">
+                    Name
+                  </p>
+                  <select
+                    className="w-full rounded-lg pl-4 py-2 text-sm border-2 border-greyHeader border-opacity-80 text-greyHeader text-opacity-80 font-semibold"
+                    value={selectedModel}
+                    onChange={(e) => {
+                      setSelectedModel(e.target.value);
+                    }}
+                  >
+                    <option value={-1}>Choose model</option>
+                    {models.map((model) => (
+                      <option key={model.id} value={model.id}>
+                        {model.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+              <div className="flex w-full space-x-4">
+                <div className="text-left w-1/2">
+                  <p className="ml-2 text-greyHeader text-opacity-80 font-semibold text-sm">
+                    First registration
+                  </p>
+                  <input
+                    type="date"
+                    value={firstRegistration}
+                    className="w-full rounded-lg pl-4 py-2 text-sm border-2 border-greyHeader border-opacity-80 text-greyHeader text-opacity-80 font-semibold"
+                    onChange={(e) => setFirstRegistration(e.target.value)}
+                  />
+                </div>
+                <div className="text-left w-1/2">
+                  <p className="ml-2 text-greyHeader text-opacity-80 font-semibold text-sm">
+                    Mileage
+                  </p>
+                  <input
+                    type="text"
+                    value={mileage}
+                    className="w-full rounded-lg pl-4 py-2 text-sm border-2 border-greyHeader border-opacity-80 text-greyHeader text-opacity-80 font-semibold"
+                    onChange={(e) => setMileage(e.target.value)}
+                  />
+                </div>
+              </div>
+              <div className="flex w-full space-x-4">
+                <div className="text-left w-1/2">
+                  <p className="ml-2 text-greyHeader text-opacity-80 font-semibold text-sm">
+                    Engine
+                  </p>
+                  <input
+                    type="text"
+                    value={engine}
+                    className="w-full rounded-lg pl-4 py-2 text-sm border-2 border-greyHeader border-opacity-80 text-greyHeader text-opacity-80 font-semibold"
+                    onChange={(e) => setEngine(e.target.value)}
+                  />
+                </div>
+                <div className="text-left w-1/2">
+                  <p className="ml-2 text-greyHeader text-opacity-80 font-semibold text-sm">
+                    Power
+                  </p>
+                  <input
+                    type="text"
+                    value={power}
+                    className="w-full rounded-lg pl-4 py-2 text-sm border-2 border-greyHeader border-opacity-80 text-greyHeader text-opacity-80 font-semibold"
+                    onChange={(e) => setPower(e.target.value)}
+                  />
+                </div>
+              </div>
+              <div className="flex w-full space-x-4">
+                <div className="text-left w-1/2">
+                  <p className="ml-2 text-greyHeader text-opacity-80 font-semibold text-sm">
+                    Body Type
+                  </p>
+                  <select
+                    className="w-full rounded-lg pl-4 py-2 text-sm border-2 border-greyHeader border-opacity-80 text-greyHeader text-opacity-80 font-semibold"
+                    onChange={(e) => {
+                      setBodyTypeId(e.target.value);
+                    }}
+                  >
+                    <option value={-1}>Choose body</option>
+                    {bodies.map((body) => (
+                      <option key={body.id} value={body.id}>
+                        {body.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="text-left w-1/2">
+                  <p className="ml-2 text-greyHeader text-opacity-80 font-semibold text-sm">
+                    Fuel Type
+                  </p>
+                  <select
+                    className="w-full rounded-lg pl-4 py-2 text-sm border-2 border-greyHeader border-opacity-80 text-greyHeader text-opacity-80 font-semibold"
+                    onChange={(e) => {
+                      setFuelTypeId(e.target.value);
+                    }}
+                  >
+                    <option value={-1}>Choose fuel</option>
+                    {fuels.map((fuel) => (
+                      <option key={fuel.id} value={fuel.id}>
+                        {fuel.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+              <div className="text-left w-full">
+                <p className="ml-2 text-greyHeader text-opacity-80 font-semibold text-sm">
+                  Gearbox Type
+                </p>
+                <select
+                  className="w-full rounded-lg pl-4 py-2 text-sm border-2 border-greyHeader border-opacity-80 text-greyHeader text-opacity-80 font-semibold"
+                  onChange={(e) => {
+                    setGearboxTypeId(e.target.value);
+                  }}
+                >
+                  <option value={-1}>Choose gearbox</option>
+                  {gearboxes.map((gearbox) => (
+                    <option key={gearbox.id} value={gearbox.id}>
+                      {gearbox.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
               <button
                 onClick={handlePut}
                 className="border text-sm py-2 rounded-lg text-white bg-redText font-semibold flex w-full justify-center"
               >
                 Submit
               </button>
+              {error ? (
+                <p className="mt-2 text-redText text-opacity-80 font-semibold text-sm">
+                  {error}
+                </p>
+              ) : null}
             </div>
           </div>
         </div>

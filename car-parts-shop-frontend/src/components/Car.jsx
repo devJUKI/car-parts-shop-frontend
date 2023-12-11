@@ -10,7 +10,7 @@ function Car() {
   const [car, setCar] = useState();
   const [isModalOpen, setModalOpen] = useState(false);
 
-  const { authData, accessToken, login, logout } = useAuth();
+  const { authData, accessToken, isAdmin, login, logout } = useAuth();
   const navigate = useNavigate();
 
   const fetchPartsData = async () => {
@@ -79,7 +79,8 @@ function Car() {
                   {car.make} {car.model}
                 </span>
               )}
-              {authData && car && authData.id == car.shop.user.id ? (
+              {(authData && car && authData.id == car.shop.user.id) ||
+              isAdmin ? (
                 <div className="space-x-2">
                   <Link
                     className="border text-sm py-2 px-6 rounded-lg text-white bg-redText font-semibold justify-center"
@@ -125,7 +126,7 @@ function Car() {
               })}
             </div>
             {isModalOpen ? (
-              <div className="border-redText border-0 items-center justify-between shadow-[0_0px_20px_-10px_rgba(0,0,0,0.4)] absolute top-1/2 left-1/2 font-bold text-greyHeader py-4 px-4 rounded-lg">
+              <div className="bg-white border-redText border-0 items-center justify-between shadow-[0_0px_20px_-10px_rgba(0,0,0,0.4)] absolute top-72 left-0 right-0 ml-auto mr-auto w-1/3 font-bold text-greyHeader py-4 px-4 rounded-lg">
                 <h1>Are you sure you want to delete?</h1>
                 <div className="flex mt-4 space-x-2">
                   <button
