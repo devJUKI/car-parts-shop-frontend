@@ -29,14 +29,26 @@ function AddCar() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    fetchData("https://localhost:7119/api/cardata/makes", setMakes);
-    fetchData("https://localhost:7119/api/cardata/fuels", setFuels);
-    fetchData("https://localhost:7119/api/cardata/bodies", setBodies);
-    fetchData("https://localhost:7119/api/cardata/gearboxes", setGearboxes);
+    fetchData(
+      "https://adswebsiteapi20231213010652.azurewebsites.net/api/cardata/makes",
+      setMakes
+    );
+    fetchData(
+      "https://adswebsiteapi20231213010652.azurewebsites.net/api/cardata/fuels",
+      setFuels
+    );
+    fetchData(
+      "https://adswebsiteapi20231213010652.azurewebsites.net/api/cardata/bodies",
+      setBodies
+    );
+    fetchData(
+      "https://adswebsiteapi20231213010652.azurewebsites.net/api/cardata/gearboxes",
+      setGearboxes
+    );
   }, []);
 
   useEffect(() => {
-    const modelsEndpoint = `https://localhost:7119/api/cardata/models?makeId=${selectedMake}`;
+    const modelsEndpoint = `https://adswebsiteapi20231213010652.azurewebsites.net/api/cardata/models?makeId=${selectedMake}`;
     fetchData(modelsEndpoint, setModels);
   }, [selectedMake]);
 
@@ -89,7 +101,7 @@ function AddCar() {
       };
 
       await axios.post(
-        `https://localhost:7119/api/shops/${shopId}/cars`,
+        `https://adswebsiteapi20231213010652.azurewebsites.net/api/shops/${shopId}/cars`,
         postData,
         config
       );

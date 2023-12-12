@@ -18,7 +18,7 @@ function Shop() {
     const fetchCarsData = async () => {
       try {
         const response = await fetch(
-          `https://localhost:7119/api/shops/${shopId}/cars`
+          `https://adswebsiteapi20231213010652.azurewebsites.net/api/shops/${shopId}/cars`
         );
         const data = await response.json();
         setCars(data);
@@ -30,7 +30,7 @@ function Shop() {
     const fetchShopData = async () => {
       try {
         const response = await fetch(
-          `https://localhost:7119/api/shops/${shopId}`
+          `https://adswebsiteapi20231213010652.azurewebsites.net/api/shops/${shopId}`
         );
         const data = await response.json();
         setShop(data);
@@ -47,7 +47,7 @@ function Shop() {
     const fetchPartsData = async (carId) => {
       try {
         const response = await fetch(
-          `https://localhost:7119/api/shops/${shopId}/cars/${carId}/parts`
+          `https://adswebsiteapi20231213010652.azurewebsites.net/api/shops/${shopId}/cars/${carId}/parts`
         );
         const data = await response.json();
 
@@ -71,7 +71,10 @@ function Shop() {
     };
 
     try {
-      await axios.delete(`https://localhost:7119/api/Shops/${shopId}`, config);
+      await axios.delete(
+        `https://adswebsiteapi20231213010652.azurewebsites.net/api/Shops/${shopId}`,
+        config
+      );
       navigate("/Shops");
     } catch (error) {
       console.error(`Error deleting shop ${shopId}:`, error);

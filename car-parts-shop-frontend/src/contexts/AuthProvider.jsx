@@ -51,12 +51,15 @@ export const AuthProvider = ({ children }) => {
 
   const getUserData = async (accessToken) => {
     try {
-      const response = await Axios.get("https://localhost:7119/api/GetUser", {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await Axios.get(
+        "https://adswebsiteapi20231213010652.azurewebsites.net/api/GetUser",
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       return response.data;
     } catch (error) {

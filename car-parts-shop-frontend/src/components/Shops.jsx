@@ -9,7 +9,9 @@ function Shops() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("https://localhost:7119/api/shops");
+        const response = await fetch(
+          "https://adswebsiteapi20231213010652.azurewebsites.net/api/shops"
+        );
         const data = await response.json();
         setShops(data);
       } catch (error) {

@@ -38,7 +38,7 @@ function EditPart() {
       };
 
       await axios.put(
-        `https://localhost:7119/api/shops/${shopId}/Cars/${carId}/Parts/${partId}`,
+        `https://adswebsiteapi20231213010652.azurewebsites.net/api/shops/${shopId}/Cars/${carId}/Parts/${partId}`,
         postData,
         config
       );

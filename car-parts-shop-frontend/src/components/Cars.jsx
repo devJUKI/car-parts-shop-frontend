@@ -18,13 +18,16 @@ function Cars() {
   };
 
   useEffect(() => {
-    fetchData("https://localhost:7119/api/cardata/makes", setMakes);
+    fetchData(
+      "https://adswebsiteapi20231213010652.azurewebsites.net/api/cardata/makes",
+      setMakes
+    );
   }, []);
 
   const changeHandler = (e) => setSelectedMake(e.target.value);
 
   useEffect(() => {
-    const modelsEndpoint = `https://localhost:7119/api/cardata/models?makeId=${selectedMake}`;
+    const modelsEndpoint = `https://adswebsiteapi20231213010652.azurewebsites.net/api/cardata/models?makeId=${selectedMake}`;
     fetchData(modelsEndpoint, setModels);
   }, [selectedMake]);
 

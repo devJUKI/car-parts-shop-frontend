@@ -16,7 +16,7 @@ function Car() {
   const fetchPartsData = async () => {
     try {
       const response = await fetch(
-        `https://localhost:7119/api/shops/${shopId}/cars/${carId}/parts`
+        `https://adswebsiteapi20231213010652.azurewebsites.net/api/shops/${shopId}/cars/${carId}/parts`
       );
       const data = await response.json();
       setParts(data);
@@ -29,7 +29,7 @@ function Car() {
     const fetchCarData = async () => {
       try {
         const response = await fetch(
-          `https://localhost:7119/api/shops/${shopId}/cars/${carId}`
+          `https://adswebsiteapi20231213010652.azurewebsites.net/api/shops/${shopId}/cars/${carId}`
         );
         const data = await response.json();
         setCar(data);
@@ -52,7 +52,7 @@ function Car() {
 
     try {
       await axios.delete(
-        `https://localhost:7119/api/shops/${shopId}/Cars/${carId}`,
+        `https://adswebsiteapi20231213010652.azurewebsites.net/api/shops/${shopId}/Cars/${carId}`,
         config
       );
       navigate(`/Shop/${shopId}`);

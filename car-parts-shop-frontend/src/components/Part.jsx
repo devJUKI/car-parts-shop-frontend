@@ -16,7 +16,7 @@ function Part() {
     const fetchPartData = async () => {
       try {
         const response = await fetch(
-          `https://localhost:7119/api/shops/${shopId}/cars/${carId}/parts/${partId}`
+          `https://adswebsiteapi20231213010652.azurewebsites.net/api/shops/${shopId}/cars/${carId}/parts/${partId}`
         );
         const data = await response.json();
         setPart(data);
@@ -38,7 +38,7 @@ function Part() {
 
     try {
       await axios.delete(
-        `https://localhost:7119/api/shops/${shopId}/Cars/${carId}/Parts/${partId}`,
+        `https://adswebsiteapi20231213010652.azurewebsites.net/api/shops/${shopId}/Cars/${carId}/Parts/${partId}`,
         config
       );
 

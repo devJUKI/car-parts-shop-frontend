@@ -24,10 +24,13 @@ function Register() {
 
     try {
       // Make an HTTP POST request to your server with the email and password
-      const response = await Axios.post("https://localhost:7119/api/Login", {
-        email: email,
-        password: password,
-      });
+      const response = await Axios.post(
+        "https://adswebsiteapi20231213010652.azurewebsites.net/api/Login",
+        {
+          email: email,
+          password: password,
+        }
+      );
 
       // Handle the server response as needed
       console.log(response.data); // You may want to do something more meaningful here

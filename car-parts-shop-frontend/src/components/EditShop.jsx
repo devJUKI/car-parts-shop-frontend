@@ -36,7 +36,7 @@ function EditShop() {
       };
 
       await axios.put(
-        `https://localhost:7119/api/Shops/${shopId}`,
+        `https://adswebsiteapi20231213010652.azurewebsites.net/api/Shops/${shopId}`,
         postData,
         config
       );

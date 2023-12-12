@@ -33,7 +33,11 @@ function CreateShop() {
         },
       };
 
-      await axios.post("https://localhost:7119/api/shops", postData, config);
+      await axios.post(
+        "https://adswebsiteapi20231213010652.azurewebsites.net/api/shops",
+        postData,
+        config
+      );
 
       navigate("/Shops");
     } catch (error) {
